@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+  <head align=center>
+    <style>
+      .box
+        {
+            height: 110px;
+            width: 110px;
+            text-align: center;
+            font-size: 60pt;
+        }
+        .scoreBox
+        {
+            height: 40px;
+            width: 60px;
+            text-align: center;
+            font-size: 10pt;
+        }
+    </style>
+	<script src="ticktack.js" type="text/javascript"></script>
+  </head>
+  <body onload="newGame();" align=center>
+    <h1>TIC TAC TOE</h1>
+	<h3>User : O<br>Computer : X</h3>
+      <br>
+          <a href="javascript:newGame();">Start Over</a>
+      <br><br>
+    <div id="output">Output text goes here.</div>
+      <br>
+    <table border="3" align=center width=45%>
+      <tr>
+        <td id="box1" class="box" onclick="nextMove(this);"></td>
+        <td id="box2" class="box" onclick="nextMove(this);"></td>     
+		<td id="box3" class="box" onclick="nextMove(this);"></td>
+      </tr>
+      <tr>
+        <td id="box4" class="box" onclick="nextMove(this);"></td>
+        <td id="box5" class="box" onclick="nextMove(this);"></td>     
+		<td id="box6" class="box" onclick="nextMove(this);"></td>
+      </tr>
+      <tr>
+        <td id="box7" class="box" onclick="nextMove(this);"></td>
+        <td id="box8" class="box" onclick="nextMove(this);"></td>  
+		<td id="box9" class="box" onclick="nextMove(this);"></td>
+      </tr>
+    </table>
+    <table border="1" align=center width=30%>
+        <br><br><br><br>
+        <b>STATISTICS</b>
+        <tr>
+            <td class="scoreBox"></td>
+            <td class="scoreBox">USER</td>
+            <td class="scoreBox">COMPUTER</td>
+        </tr>
+        <tr>
+            <td class="scoreBox"><i>WINS</i></td>
+            <td id="uW" class="scoreBox">userWins</td>
+            <td id="cW" class="scoreBox">computerWins</td>
+        </tr>
+        <tr>
+            <td class="scoreBox"><i>LOSSES</i></td>
+            <td id="uL" class="scoreBox">userLosses</td>
+            <td id="cL" class="scoreBox">computerLosses</td>
+        </tr>
+        <tr>
+            <td class="scoreBox"><i>DRAWS</i></td>
+            <td id="uD" class="scoreBox">userDraws</td>
+            <td id="cD" class="scoreBox">computerDraws</td>
+        </tr>
+    </table>
+  </body>
+</html>
