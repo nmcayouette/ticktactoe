@@ -1,25 +1,16 @@
-function outputToUser(message) {
-  document.getElementById('output').innerText = message;
-}
-
 // Starts a new game
 function newGame() {
-  for (let n = 1; n < 10; n + 1) {
+  for (let n = 1; n < 10; n++) {
     clearFinishedGame(n);
   }
-
+  winner = null;
   if (turnChoice(true)) {
     computerPlayer();
   }
   showStats();
 }
 
-// access box value
-function getPosition(boxNumber) {
-  return document.getElementById(`box${boxNumber}`).innerText;
-}
-
-// determine whose turn
+// Random choice of first player
 function turnChoice() {
   const decision = Math.random();
   let result = false;
@@ -36,14 +27,30 @@ function turnChoice() {
     outputToUser('Computer begins.');
     result = true;
   }
-
   return result;
 }
 
-// next move/error
-function nextMove(box, winner) {
+function clearFinishedGame(number) {
+  document.getElementById('box' + number).innerText = '';
+}
+
+function outputToUser(message) {
+  document.getElementById('output').innerText = message;
+}
+
+function Statistics(w, l, d) {
+  this.wins = w;
+  this.losses = l;
+  this.draws = d;
+}
+
+const user = new Statistics(0, 0, 0);
+const computer = new Statistics(0, 0, 0);
+
+// Next move/error
+function nextMove(box) {
   if (winner != null) {
-    outputToUser(`${winner} won`);
+    outputToUser(winner + ' won. Press Replay to try again.');
   } else if (box.innerText === '') {
     box.innerText = 'o';
     newTurn();
@@ -52,25 +59,10 @@ function nextMove(box, winner) {
   }
 }
 
-// AI opponent with random token placement
-function computerPlayer() {
-  let placement = Math.floor(Math.random() * 9) + 1;
-  while (document.getElementById(`box${placement}`).innerText !== '') {
-    placement = Math.floor(Math.random() * 9) + 1;
-  }
-  document.getElementById(`box${placement}`).innerText = 'x';
-
+// New turn
+function newTurn() {
   if (checkForWinner(true)) {
-    newTurn();
-  } else if (checkForDraw(true)) {
-    newTurn();
-  }
-}
-
-// new turn
-function newTurn(winner) {
-  if (checkForWinner(true)) {
-    outputToUser(`Game over: ${winner} WIN`);
+    outputToUser('Game over: ' + winner + ' WIN');
     winLossIncrement();
   } else if (checkForDraw(true)) {
     outputToUser('Game over: DRAW');
@@ -84,51 +76,65 @@ function newTurn(winner) {
   }
 }
 
-// determine win
+// AI opponent with random token placement
+function computerPlayer() {
+  let placement = Math.floor(Math.random() * 9) + 1;
+  while (document.getElementById('box' + placement).innerText !== '') {
+    placement = Math.floor(Math.random() * 9) + 1;
+  }
+  document.getElementById('box' + placement).innerText = 'x';
+
+  if (checkForWinner(true)) {
+    newTurn();
+  } else if (checkForDraw(true)) {
+    newTurn();
+  }
+}
+
+// Access box value
+function getPosition(boxNumber) {
+  return document.getElementById('box' + boxNumber).innerText;
+}
+
+// Determine win
 function checkForWinner() {
   let result = false;
 
-  if (checkForWin(1, 2, 3) || checkForWin(4, 5, 6) || checkForWin(7, 8, 9) ||
-    checkForWin(1, 4, 7) || checkForWin(2, 5, 8) || checkForWin(3, 6, 9) ||
-    checkForWin(1, 5, 9) || checkForWin(3, 5, 7)) {
+  if (checkForWin(1, 2, 3) ||
+    checkForWin(4, 5, 6) ||
+    checkForWin(7, 8, 9) ||
+    checkForWin(1, 4, 7) ||
+    checkForWin(2, 5, 8) ||
+    checkForWin(3, 6, 9) ||
+    checkForWin(1, 5, 9) ||
+    checkForWin(3, 5, 7)) {
     result = true;
   }
   return result;
 }
 
-function clearFinishedGame(number) {
-  document.getElementById(`box${number}`).innerText = '';
-}
-
-function Statistics(w, l, d) {
-  this.wins = w;
-  this.losses = l;
-  this.draws = d;
-}
-
-const user = new Statistics(0, 0, 0);
-const computer = new Statistics(0, 0, 0);
-
-// check box value
+// Check box value
 function checkForWin(a, b, c) {
   let result = false;
 
   if (getPosition(a) === 'x' && getPosition(b) === 'x' && getPosition(c) === 'x') {
     result = true;
+    winner = 'Computer';
   } else if (getPosition(a) === 'o' && getPosition(b) === 'o' && getPosition(c) === 'o') {
     result = true;
+    winner = 'User';
   }
   return result;
 }
 
-// determine draw
+// Determine draw
 function checkForDraw() {
   const positions = [];
   let result = false;
 
-  for (let n = 1; n < 10; n + 1) {
-    if (document.getElementById(`box${n}`).innerText !== '') {
-      positions[n - 1] = document.getElementById(`box${n}`).innerText;
+  for (n = 1; n < 10; n++) {
+    if (document.getElementById('box' + n).innerText !== '') {
+      positions[n - 1] = document.getElementById('box' + n).innerText;
     } else {
       break;
     }
@@ -137,11 +143,12 @@ function checkForDraw() {
   if (positions.length === 9) {
     result = true;
   }
+
   return result;
 }
 
-// increment wins/losses
-function winLossIncrement(winner) {
+// Increment win/loss
+function winLossIncrement() {
   if (winner === 'Computer') {
     computer.wins += 1;
     user.losses += 1;
@@ -151,13 +158,13 @@ function winLossIncrement(winner) {
   }
 }
 
-// increment draws
+// Increment draws
 function drawIncrement() {
   user.draws += 1;
   computer.draws += 1;
 }
 
-// display statistics
+// Display statistics
 function showStats() {
   document.getElementById('uW').innerText = user.wins;
   document.getElementById('uL').innerText = user.losses;
